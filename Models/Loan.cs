@@ -64,7 +64,7 @@ namespace LibraryManagement.Models
         [Display(Name = "Registration Date")]
         public DateTime RegistrationDate { get; set; } = DateTime.Now;
 
-        // Navigation property
+        // Navigation property for many-to-many relationship (User - Loan)
         public ICollection<Loan> Loans { get; set; } = new List<Loan>();
 
         [Display(Name = "Full Name")]

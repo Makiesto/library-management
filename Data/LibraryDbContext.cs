@@ -20,7 +20,7 @@ namespace LibraryManagement.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Konfiguracja relacji Many-to-Many między Book i Author
+            // Many-to-Many relationship configuration between Book and Author
             modelBuilder.Entity<BookAuthor>()
                 .HasKey(ba => new { ba.BookId, ba.AuthorId });
 
@@ -34,7 +34,7 @@ namespace LibraryManagement.Data
                 .WithMany(a => a.BookAuthors)
                 .HasForeignKey(ba => ba.AuthorId);
 
-            // Konfiguracja relacji Loan
+            // Loan relationships configuration
             modelBuilder.Entity<Loan>()
                 .HasOne(l => l.Book)
                 .WithMany(b => b.Loans)
@@ -47,7 +47,7 @@ namespace LibraryManagement.Data
                 .HasForeignKey(l => l.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Indeksy dla wydajności
+            // Indexes for performance
             modelBuilder.Entity<Book>()
                 .HasIndex(b => b.ISBN)
                 .IsUnique();

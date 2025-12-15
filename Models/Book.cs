@@ -6,27 +6,27 @@ namespace LibraryManagement.Models
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Tytuł jest wymagany")]
-        [StringLength(200, ErrorMessage = "Tytuł nie może być dłuższy niż 200 znaków")]
-        [Display(Name = "Tytuł")]
+        [Required(ErrorMessage = "Title is required")]
+        [StringLength(200, ErrorMessage = "Title cannot be longer than 200 characters")]
+        [Display(Name = "Title")]
         public string Title { get; set; }
 
-        [Required(ErrorMessage = "ISBN jest wymagany")]
-        [RegularExpression(@"^(?:\d{10}|\d{13})$", ErrorMessage = "ISBN musi składać się z 10 lub 13 cyfr")]
+        [Required(ErrorMessage = "ISBN is required")]
+        [RegularExpression(@"^(?:\d{10}|\d{13})$", ErrorMessage = "ISBN must consist of 10 or 13 digits")]
         public string ISBN { get; set; }
 
-        [Required(ErrorMessage = "Rok wydania jest wymagany")]
-        [Range(1000, 2100, ErrorMessage = "Rok wydania musi być pomiędzy 1000 a 2100")]
-        [Display(Name = "Rok wydania")]
+        [Required(ErrorMessage = "Publication year is required")]
+        [Range(1000, 2100, ErrorMessage = "Publication year must be between 1000 and 2100")]
+        [Display(Name = "Publication Year")]
         public int PublicationYear { get; set; }
 
-        [Required(ErrorMessage = "Liczba kopii jest wymagana")]
-        [Range(0, 1000, ErrorMessage = "Liczba kopii musi być pomiędzy 0 a 1000")]
-        [Display(Name = "Liczba dostępnych kopii")]
+        [Required(ErrorMessage = "Number of copies is required")]
+        [Range(0, 1000, ErrorMessage = "Number of copies must be between 0 and 1000")]
+        [Display(Name = "Number of Available Copies")]
         public int AvailableCopies { get; set; }
 
-        [StringLength(1000, ErrorMessage = "Opis nie może być dłuższy niż 1000 znaków")]
-        [Display(Name = "Opis")]
+        [StringLength(1000, ErrorMessage = "Description cannot be longer than 1000 characters")]
+        [Display(Name = "Description")]
         public string? Description { get; set; }
 
         // Navigation properties
