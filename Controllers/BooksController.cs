@@ -14,12 +14,22 @@ namespace LibraryManagement.Controllers
         }
 
         // GET: Books
-        public async  Task<IActionResult> Index()
+        public async  Task<IActionResult> Index(string searchString)
         {
-            var books = await _context.Books
+            var booksQuery = _context.Books
                 .Include(b => b.BookAuthors)
                 .ThenInclude(ba => ba.Author)
-                .ToListAsync();
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                booksQuery = booksQuery.Where(b =>
+                    b.Title.Contains(searchString) ||
+                    b.ISBN.Contains(searchString));
+                ViewData["SearchString"] = searchString;
+            }
+
+            var books = await booksQuery.ToListAsync();
 
             return View(books);
         }
