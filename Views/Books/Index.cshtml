@@ -1,0 +1,36 @@
+﻿@model IEnumerable<LibraryManagement.Models.Book>
+
+	@{
+	ViewData["Title"] = "Books List";
+}
+
+<h1>@ViewData["Title"]</h1>
+<table class="table">
+	<thead>
+		<tr>
+			<th>Title</th>
+			<th>Author</th>
+			<th>Genre</th>
+			<th>Published Year</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+
+@foreach
+(
+	var book in Model 
+)
+{
+	<tr>
+			<td>@book.Title</td>
+			<td>@book.ISBN</td>
+			<td>@book.PublicationYear</td>
+			<td>@book.AvailableCopies</td>
+			<td>
+				<a asp-action="Details" asp-route-id="@book.Id">Details</a> 
+			</td>
+			</tr>
+		}
+	</tbody>
+</table>
