@@ -10,7 +10,7 @@ namespace LibraryManagement.Data
         {
             var optionsBuilder = new DbContextOptionsBuilder<LibraryDbContext>();
            
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=LibraryDb;Trusted_Connection=True;MultipleActiveResultSets=true");
+            optionsBuilder.UseSqlite("Data Source=library.db");
             
             return new LibraryDbContext(optionsBuilder.Options);
         }

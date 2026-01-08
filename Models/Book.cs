@@ -9,11 +9,11 @@ namespace LibraryManagement.Models
         [Required(ErrorMessage = "Title is required")]
         [StringLength(200, ErrorMessage = "Title cannot be longer than 200 characters")]
         [Display(Name = "Title")]
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "ISBN is required")]
         [RegularExpression(@"^(?:\d{10}|\d{13})$", ErrorMessage = "ISBN must consist of 10 or 13 digits")]
-        public string ISBN { get; set; }
+        public string ISBN { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Publication year is required")]
         [Range(1000, 2100, ErrorMessage = "Publication year must be between 1000 and 2100")]
