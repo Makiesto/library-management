@@ -1,7 +1,9 @@
 ﻿using LibraryManagement.Data;
 using LibraryManagement.Models;
+using LibraryManagement.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibraryManagement.Controllers
@@ -60,25 +62,41 @@ namespace LibraryManagement.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create()
         {
-            ViewBag.Authors = await _context.Authors
-                .OrderBy(a => a.LastName)
-                .Select(a => new { a.Id, FullName = a.FirstName + " " + a.LastName })
-                .ToListAsync();
-            return View();
+            var viewModel = new BookFormViewModel
+            {
+                AvailableAuthors = await GetAuthorsSelectList()
+            };
+            return View(viewModel);
         }
 
         // POST: Books/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Create(Book book, List<int> authorIds)
+        public async Task<IActionResult> Create(BookFormViewModel model)
         {
             if (ModelState.IsValid)
             {
+                if (await _context.Books.AnyAsync(b => b.ISBN == model.ISBN))
+                {
+                    ModelState.AddModelError("ISBN", "A book with this ISBN already exists.");
+                    model.AvailableAuthors = await GetAuthorsSelectList();
+                    return View(model);
+                }
+
+                var book = new Book
+                {
+                    Title = model.Title,
+                    ISBN = model.ISBN,
+                    PublicationYear = model.PublicationYear,
+                    AvailableCopies = model.AvailableCopies,
+                    Description = model.Description
+                };
+
                 _context.Books.Add(book);
                 await _context.SaveChangesAsync();
 
-                foreach (var authorId in authorIds)
+                foreach (var authorId in model.SelectedAuthorIds)
                 {
                     _context.BookAuthors.Add(new BookAuthor
                     {
@@ -88,16 +106,24 @@ namespace LibraryManagement.Controllers
                 }
                 await _context.SaveChangesAsync();
 
-                TempData["SuccessMessage"] = "Książka została dodana.";
+                TempData["SuccessMessage"] = "Book has been added.";
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Authors = await _context.Authors
-                .OrderBy(a => a.LastName)
-                .Select(a => new { a.Id, FullName = a.FirstName + " " + a.LastName })
-                .ToListAsync();
-            return View(book);
+            model.AvailableAuthors = await GetAuthorsSelectList();
+            return View(model);
         }
 
+        private async Task<List<SelectListItem>> GetAuthorsSelectList()
+        {
+            return await _context.Authors
+                .OrderBy(a => a.LastName)
+                .Select(a => new SelectListItem
+                {
+                    Value = a.Id.ToString(),
+                    Text = a.FullName
+                })
+                .ToListAsync();
+        }
     }
 }
