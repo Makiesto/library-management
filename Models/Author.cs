@@ -19,7 +19,9 @@ namespace LibraryManagement.Models
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
-        public DateTime BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; }
+        public string? Biography { get; set; }
+
 
         [Display(Name = "Full Name")]
         public string FullName => $"{FirstName} {LastName}";
