@@ -1,0 +1,80 @@
+﻿@model LibraryManagement.ViewModels.BookFormViewModel
+
+@{
+    ViewData["Title"] = "Add Book";
+}
+
+<div class="container mt-4">
+    <h2>Add New Book</h2>
+
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group mb-3">
+            <label asp-for="Title"></label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="ISBN"></label>
+            <input asp-for="ISBN"
+                   class="form-control"
+                   placeholder="9788375780635" />
+            <span asp-validation-for="ISBN" class="text-danger"></span>
+            <small class="text-muted">10 or 13 digits</small>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    <label asp-for="PublicationYear"></label>
+                    <input asp-for="PublicationYear"
+                           class="form-control"
+                           type="number" />
+                    <span asp-validation-for="PublicationYear" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    <label asp-for="AvailableCopies"></label>
+                    <input asp-for="AvailableCopies"
+                           class="form-control"
+                           type="number" />
+                    <span asp-validation-for="AvailableCopies" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="Description"></label>
+            <textarea asp-for="Description"
+                      class="form-control"
+                      rows="3"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="SelectedAuthorIds">
+                Authors (select one or more)
+            </label>
+            <select asp-for="SelectedAuthorIds"
+                    asp-items="Model.AvailableAuthors"
+                    class="form-control"
+                    multiple
+                    size="5">
+            </select>
+            <span asp-validation-for="SelectedAuthorIds" class="text-danger"></span>
+            <small class="text-muted">
+                Hold Ctrl/Cmd to select multiple authors
+            </small>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
