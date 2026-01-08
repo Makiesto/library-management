@@ -1,67 +1,67 @@
 ﻿@model LibraryManagement.Models.Book
 
 @{
-	ViewData["Title"] = "Book Details";
+    ViewData["Title"] = "Book Details";
 }
 
 <h1>@ViewData["Title"]</h1>
 
 <div>
     <dl class="row">
-        <dt class="col-sm-2">ISBN</dt>
-        <dd class="col-sm-10">@Model.ISBN</dd>
+        <dt class="col-sm-3">ISBN</dt>
+        <dd class="col-sm-9">@Model.ISBN</dd>
 
-        <dt class="col-sm-2">Publicity year</dt>
-        <dd class="col-sm-10">@Model.PublicationYear</dd>
+        <dt class="col-sm-3">Publication Year</dt>
+        <dd class="col-sm-9">@Model.PublicationYear</dd>
 
-        <dt class="col-sm-2">Available copies</dt>
-        <dd class="col-sm-10">@Model.AvailableCopies</dd>
+        <dt class="col-sm-3">Available Copies</dt>
+        <dd class="col-sm-9">@Model.AvailableCopies</dd>
 
-        <dt class="col-sm-2">Authors</dt>
-        <dd class="col-sm-10">
-            @string.Join(", ", Model.BookAuthors.Select(ba => ba.Author.FullName))
-        </dd>
-
-    </dl>
-</div>
-
-@if (Model.BookAuthors.Any())
+        <dt class="col-sm-3">Authors</dt>
+        <dd class="col-sm-9">
+            @if (Model.BookAuthors != null && Model.BookAuthors.Any())
             {
-<ul class="list-unstyled">
-    @foreach (var ba in Model.BookAuthors)
+            <ul class="list-unstyled mb-0">
+                @foreach (var ba in Model.BookAuthors)
                     {
-    <li>@ba.Author.FullName</li>
+                <li>@ba.Author.FullName</li>
                     }
-</ul>
+            </ul>
             }
             else
             {
-<span class="text-muted">Brak autorów</span>
+            <span class="text-muted">No authors</span>
             }
         </dd>
 
-@if (!string.IsNullOrEmpty(Model.Description))
+        @if (!string.IsNullOrWhiteSpace(Model.Description))
         {
-<dt class="col-sm-3">Opis</dt>
-<dd class="col-sm-9">@Model.Description</dd>
+        <dt class="col-sm-3">Description</dt>
+        <dd class="col-sm-9">@Model.Description</dd>
         }
     </dl>
+</div>
 
 <div class="mt-4">
-    <a asp-action="Index" class="btn btn-secondary">Powrót do listy</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 
-    @if (User.Identity.IsAuthenticated && Model.AvailableCopies > 0)
-        {
-    <a asp-controller="Loans" asp-action="Create" asp-route-bookId="@Model.Id"
-       class="btn btn-primary">Wypożycz</a>
-        }
+    @if (User.Identity?.IsAuthenticated == true && Model.AvailableCopies > 0)
+    {
+    <a asp-controller="Loans"
+       asp-action="Create"
+       asp-route-bookId="@Model.Id"
+       class="btn btn-primary">
+        Borrow
+    </a>
+    }
 
     @if (User.IsInRole("Admin"))
-        {
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edytuj</a>
-    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Usuń</a>
-        }       
+    {
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+        Edit
+    </a>
+    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">
+        Delete
+    </a>
+    }
 </div>
-</div>
-
-<a asp-action="Index">Back to List</a>
