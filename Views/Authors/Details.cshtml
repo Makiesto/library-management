@@ -1,0 +1,81 @@
+﻿@model LibraryManagement.Models.Author
+
+@{
+    ViewData["Title"] = "Author Details";
+}
+
+<div class="container mt-4">
+    <h1>@Model.FullName</h1>
+
+    <dl class="row">
+        <dt class="col-sm-3">First Name</dt>
+        <dd class="col-sm-9">@Model.FirstName</dd>
+
+        <dt class="col-sm-3">Last Name</dt>
+        <dd class="col-sm-9">@Model.LastName</dd>
+
+        <dt class="col-sm-3">Date of Birth</dt>
+        <dd class="col-sm-9">
+            @if (Model.BirthDate.HasValue)
+            {
+                @Model.BirthDate.Value.ToString("dd MMMM yyyy")
+            }
+            else
+            {
+                <span class="text-muted">No data</span>
+            }
+        </dd>
+
+        @if (!string.IsNullOrEmpty(Model.Biography))
+        {
+            <dt class="col-sm-3">Biography</dt>
+            <dd class="col-sm-9">@Model.Biography</dd>
+        }
+    </dl>
+
+    <hr />
+
+    <h4>Author's Books (@Model.BookAuthors.Count)</h4>
+    @if (Model.BookAuthors.Any())
+    {
+        <div class="row">
+            @foreach (var ba in Model.BookAuthors)
+            {
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">@ba.Book.Title</h5>
+                            <p class="card-text">
+                                <small>ISBN: @ba.Book.ISBN</small><br />
+                                <small>Year: @ba.Book.PublicationYear</small>
+                            </p>
+                            <a asp-controller="Books"
+                               asp-action="Details"
+                               asp-route-id="@ba.Book.Id"
+                               class="btn btn-sm btn-info">
+                                View Book
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="text-muted">This author has no books.</p>
+    }
+
+    <div class="mt-4">
+        <a asp-action="Index" class="btn btn-secondary">Back</a>
+
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-action="Edit"
+               asp-route-id="@Model.Id"
+               class="btn btn-warning">
+                Edit
+            </a>
+        }
+    </div>
+</div>

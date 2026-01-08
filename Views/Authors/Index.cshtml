@@ -1,0 +1,97 @@
+﻿@model IEnumerable<LibraryManagement.Models.Author>
+
+@{
+    ViewData["Title"] = "Author List";
+}
+
+<div class="container mt-4">
+    <h1>Author List</h1>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <form asp-action="Index" method="get" class="mb-4">
+        <div class="row">
+            <div class="col-md-10">
+                <input type="text"
+                       name="searchString"
+                       value="@ViewData["SearchString"]"
+                       class="form-control"
+                       placeholder="Search by first name or last name..." />
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Search</button>
+            </div>
+        </div>
+    </form>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">No authors found in the system.</div>
+    }
+    else
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Full Name</th>
+                    <th>Date of Birth</th>
+                    <th>Number of Books</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var author in Model)
+                {
+                    <tr>
+                        <td><strong>@author.FullName</strong></td>
+                        <td>
+                            @if (author.BirthDate.HasValue)
+                            {
+                                @author.BirthDate.Value.ToString("dd.MM.yyyy")
+                            }
+                            else
+                            {
+                                <span class="text-muted">-</span>
+                            }
+                        </td>
+                        <td>@author.BookAuthors.Count</td>
+                        <td>
+                            <a asp-action="Details"
+                               asp-route-id="@author.Id"
+                               class="btn btn-sm btn-info">
+                                Details
+                            </a>
+
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <a asp-action="Edit"
+                                   asp-route-id="@author.Id"
+                                   class="btn btn-sm btn-warning">
+                                    Edit
+                                </a>
+                                <a asp-action="Delete"
+                                   asp-route-id="@author.Id"
+                                   class="btn btn-sm btn-danger">
+                                    Delete
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Create" class="btn btn-primary mt-3">
+            Add Author
+        </a>
+    }
+</div>
