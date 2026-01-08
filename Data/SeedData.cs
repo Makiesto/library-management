@@ -88,19 +88,19 @@ namespace LibraryManagement.Data
                 {
                     new Book
                     {
-                        Title = "Wiedzmin: Ostatnie Zyczenie",
+                        Title = "The Witcher: The Last Wish",
                         ISBN = "9788375780635",
                         PublicationYear = 1993,
                         AvailableCopies = 3,
-                        Description = "Zbior opowiadan o wiedzminie Geralcie"
+                        Description = "A collection of stories about the witcher Geralt"
                     },
                     new Book
                     {
-                        Title = "Harry Potter i Kamien Filozoficzny",
+                        Title = "Harry Potter and the Philosopher's Stone",
                         ISBN = "9788380082445",
                         PublicationYear = 1997,
                         AvailableCopies = 5,
-                        Description = "Pierwsza czesc przygod mlodego czarodzieja"
+                        Description = "The first part of the adventures of the young wizard"
                     }
                 };
 
