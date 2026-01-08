@@ -61,6 +61,11 @@ namespace LibraryManagement.Controllers
         }
 
 
+        [AllowAnonymous]
+        public IActionResult Login()
+        {
+            return View();
+        }
 
         [HttpPost]
         [AllowAnonymous]
