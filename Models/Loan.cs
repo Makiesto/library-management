@@ -48,26 +48,5 @@ namespace LibraryManagement.Models
         Overdue = 3
     }
 
-    // IdentityUser extension for application users
-    public class ApplicationUser : IdentityUser
-    {
-        [Required]
-        [StringLength(100)]
-        [Display(Name = "First Name")]
-        public string FirstName { get; set; }
-
-        [Required]
-        [StringLength(100)]
-        [Display(Name = "Last Name")]
-        public string LastName { get; set; }
-
-        [Display(Name = "Registration Date")]
-        public DateTime RegistrationDate { get; set; } = DateTime.Now;
-
-        // Navigation property for many-to-many relationship (User - Loan)
-        public ICollection<Loan> Loans { get; set; } = new List<Loan>();
-
-        [Display(Name = "Full Name")]
-        public string FullName => $"{FirstName} {LastName}";
-    }
+   
 }

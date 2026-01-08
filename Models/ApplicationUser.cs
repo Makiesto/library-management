@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using LibraryManagement.Models;
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
 
@@ -6,13 +7,16 @@ using System.ComponentModel.DataAnnotations;
     {
         [Required]
         [StringLength(100)]
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } = string.Empty;
 
-        [Required]
+    [Required]
         [StringLength(100)]
-        public string LastName { get; set; }
+        public string LastName { get; set; } = string.Empty;
 
-        public DateTime RegistrationDate { get; set; } = DateTime.Now;
+    public DateTime RegistrationDate { get; set; } = DateTime.Now;
 
-        public string FullName => $"{FirstName} {LastName}";
+    public ICollection<Loan> Loans { get; set; } = new List<Loan>();
+
+
+    public string FullName => $"{FirstName} {LastName}";
     }
