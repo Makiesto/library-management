@@ -1,29 +1,30 @@
 ﻿@model LibraryManagement.ViewModels.BookFormViewModel
 
 @{
-    ViewData["Title"] = "Add Book";
+    ViewData["Title"] = "Edit Book";
 }
 
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h2 class="mb-0">Add New Book</h2>
+                <div class="card-header bg-warning text-dark">
+                    <h2 class="mb-0">Edit Book</h2>
                 </div>
                 <div class="card-body">
-                    <form asp-action="Create" method="post">
+                    <form asp-action="Edit" method="post">
+                        <input type="hidden" asp-for="Id" />
                         <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
                         <div class="mb-3">
                             <label asp-for="Title" class="form-label"></label>
-                            <input asp-for="Title" class="form-control" placeholder="Enter book title" />
+                            <input asp-for="Title" class="form-control" />
                             <span asp-validation-for="Title" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="ISBN" class="form-label"></label>
-                            <input asp-for="ISBN" class="form-control" placeholder="9788375780635" />
+                            <input asp-for="ISBN" class="form-control" />
                             <span asp-validation-for="ISBN" class="text-danger"></span>
                             <small class="form-text text-muted">10 or 13 digits only</small>
                         </div>
@@ -32,14 +33,14 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label asp-for="PublicationYear" class="form-label"></label>
-                                    <input asp-for="PublicationYear" class="form-control" type="number" min="1000" max="2100" />
+                                    <input asp-for="PublicationYear" class="form-control" type="number" />
                                     <span asp-validation-for="PublicationYear" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label asp-for="AvailableCopies" class="form-label"></label>
-                                    <input asp-for="AvailableCopies" class="form-control" type="number" min="0" max="1000" />
+                                    <input asp-for="AvailableCopies" class="form-control" type="number" />
                                     <span asp-validation-for="AvailableCopies" class="text-danger"></span>
                                 </div>
                             </div>
@@ -47,24 +48,22 @@
 
                         <div class="mb-3">
                             <label asp-for="Description" class="form-label"></label>
-                            <textarea asp-for="Description" class="form-control" rows="3"
-                                      placeholder="Brief description of the book..."></textarea>
+                            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
                             <span asp-validation-for="Description" class="text-danger"></span>
-                            <small class="form-text text-muted">Optional, max 1000 characters</small>
                         </div>
 
                         <div class="mb-3">
-                            <label asp-for="SelectedAuthorIds" class="form-label">Authors (select one or more)</label>
+                            <label asp-for="SelectedAuthorIds" class="form-label">Authors</label>
                             <select asp-for="SelectedAuthorIds" asp-items="Model.AvailableAuthors"
                                     class="form-select" multiple size="6">
                             </select>
                             <span asp-validation-for="SelectedAuthorIds" class="text-danger"></span>
-                            <small class="form-text text-muted">Hold Ctrl/Cmd to select multiple authors</small>
+                            <small class="form-text text-muted">Hold Ctrl/Cmd to select multiple</small>
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-                            <button type="submit" class="btn btn-primary">Save Book</button>
+                            <button type="submit" class="btn btn-warning">Save Changes</button>
                         </div>
                     </form>
                 </div>
