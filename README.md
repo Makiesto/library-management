@@ -63,7 +63,7 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectio
 optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=LibraryManagementDB;...");
 ```
 
-#### Running Migrations
+4 **Running Migrations**
 After configuring your preferred provider, run the following commands:
 
 ```bash
