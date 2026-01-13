@@ -12,6 +12,7 @@ namespace LibraryManagement.ViewModels
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
+        [Display(Name = "RememberMe")]
         public bool RememberMe { get; set; }
     }
 }
