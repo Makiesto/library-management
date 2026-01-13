@@ -1,3 +1,4 @@
+
 # System Zarządzania Biblioteką - ASP.NET MVC
 
 > **[🇵🇱 Polska wersja](README.pl.md)** | **[🇬🇧 English version](README.md)**
@@ -18,8 +19,8 @@ System Zarządzania Biblioteką to aplikacja webowa stworzona w ASP.NET Core MVC
 
 1. **Sklonuj repozytorium**
 ```bash
-git clone https://github.com/makiesto/LibraryManagement.git
-cd LibraryManagement
+git clone https://github.com/Makiesto/library-management
+cd library-management
 ```
 
 2. **Zainstaluj pakiety**
@@ -29,27 +30,48 @@ dotnet restore
 
 3. **Skonfiguruj bazę danych**
 
-Edytuj `appsettings.json`:
+Projekt jest wieloplatformowy i wspiera zarówno **SQLite** (zalecane dla macOS/Linux), jak i **SQL Server** (Windows).
+
+#### A. Konfiguracja pod SQLite (macOS / Linux)
+Jeśli pracujesz na komputerze Mac lub z systemem Linux, wykonaj poniższe kroki:
+
+* **appsettings.json**: Upewnij się, że Connection String wskazuje na plik:
 ```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=LibraryManagementDB;Trusted_Connection=True;MultipleActiveResultSets=true"
-  }
-}
+"DefaultConnection": "Data Source=library.db"
+```
+* **Program.cs**: Zmień dostawcę na SQLite:
+```csharp
+options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+```
+* **LibraryDbContextFactory.cs**: Zaktualizuj fabrykę czasu projektowego:
+```csharp
+optionsBuilder.UseSqlite("Data Source=library.db");
 ```
 
-Dla SQLite (alternatywa):
+#### B. Konfiguracja pod SQL Server (Windows)
+Jeśli pracujesz na systemie Windows i chcesz korzystać z LocalDB:
+
+* **appsettings.json**: Użyj Connection Stringa dla SQL Server:
 ```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Data Source=library.db"
-  }
-}
+"DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=LibraryManagementDB;Trusted_Connection=True;"
+```
+* **Program.cs**: Zmień dostawcę na SQL Server:
+```csharp
+options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+```
+* **LibraryDbContextFactory.cs**: Zaktualizuj fabrykę czasu projektowego:
+```csharp
+optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=LibraryManagementDB;...");
 ```
 
-4. **Utwórz bazę danych**
+4. **Uruchamianie Migracji**
+Po wybraniu i skonfigurowaniu dostawcy bazy danych, wykonaj następujące komendy w terminalu:
+
 ```bash
+rm -rf Migrations
+
 dotnet ef migrations add InitialCreate
+
 dotnet ef database update
 ```
 
@@ -58,7 +80,7 @@ dotnet ef database update
 dotnet run
 ```
 
-Aplikacja będzie dostępna pod adresem: `https://localhost:5001`
+Aplikacja będzie dostępna pod adresem: `https://localhost:5235`
 
 ---
 
@@ -101,26 +123,26 @@ Aplikacja automatycznie tworzy użytkowników testowych przy pierwszym uruchomie
 ### Encje
 
 1. **Book** (Główna encja)
-   - Id, Title, ISBN, PublicationYear, AvailableCopies, Description
-   - Relacja Many-to-Many z Author przez BookAuthor
-   - Relacja One-to-Many z Loan
+- Id, Title, ISBN, PublicationYear, AvailableCopies, Description
+- Relacja Many-to-Many z Author przez BookAuthor
+- Relacja One-to-Many z Loan
 
 2. **Author**
-   - Id, FirstName, LastName, BirthDate, Biography
-   - Relacja Many-to-Many z Book przez BookAuthor
+- Id, FirstName, LastName, BirthDate, Biography
+- Relacja Many-to-Many z Book przez BookAuthor
 
 3. **ApplicationUser** (rozszerza IdentityUser)
-   - FirstName, LastName, RegistrationDate
-   - Relacja One-to-Many z Loan
+- FirstName, LastName, RegistrationDate
+- Relacja One-to-Many z Loan
 
 4. **Loan**
-   - Id, BookId, UserId, LoanDate, DueDate, ReturnDate, Status
-   - Relacje Many-to-One z Book i ApplicationUser
+- Id, BookId, UserId, LoanDate, DueDate, ReturnDate, Status
+- Relacje Many-to-One z Book i ApplicationUser
 
 ### Diagram relacji encji
 ```
 Author <----> BookAuthor <----> Book <----> Loan <----> ApplicationUser
-       (Many-to-Many)        (One-to-Many)   (Many-to-One)
+(Many-to-Many) (One-to-Many) (Many-to-One)
 ```
 
 ---
@@ -157,27 +179,27 @@ Aplikacja udostępnia kompletne REST API dla encji Book.
 #### 📚 GET /api/booksapi
 Pobierz wszystkie książki z autorami
 ```bash
-curl https://localhost:5001/api/booksapi
+curl https://localhost:5235/api/booksapi
 ```
 
 **Odpowiedź 200 OK:**
 ```json
 [
-  {
-    "id": 1,
-    "title": "Wiedźmin: Ostatnie życzenie",
-    "isbn": "9788375780635",
-    "publicationYear": 1993,
-    "availableCopies": 3,
-    "description": "Zbiór opowiadań...",
-    "authors": [
-      {
-        "id": 1,
-        "firstName": "Andrzej",
-        "lastName": "Sapkowski"
-      }
-    ]
-  }
+{
+"id": 1,
+"title": "Wiedźmin: Ostatnie życzenie",
+"isbn": "9788375780635",
+"publicationYear": 1993,
+"availableCopies": 3,
+"description": "Zbiór opowiadań...",
+"authors": [
+{
+"id": 1,
+"firstName": "Andrzej",
+"lastName": "Sapkowski"
+}
+]
+}
 ]
 ```
 
@@ -186,13 +208,13 @@ curl https://localhost:5001/api/booksapi
 #### 📖 GET /api/booksapi/{id}
 Pobierz szczegóły książki po ID
 ```bash
-curl https://localhost:5001/api/booksapi/1
+curl https://localhost:5235/api/booksapi/1
 ```
 
 **Odpowiedź 404 Not Found:**
 ```json
 {
-  "message": "Książka o ID 999 nie została znaleziona"
+"message": "Książka o ID 999 nie została znaleziona"
 }
 ```
 
@@ -201,7 +223,7 @@ curl https://localhost:5001/api/booksapi/1
 #### 🔍 GET /api/booksapi/search?query={text}
 Wyszukaj książki po tytule lub ISBN
 ```bash
-curl "https://localhost:5001/api/booksapi/search?query=harry"
+curl "https://localhost:5235/api/booksapi/search?query=harry"
 ```
 
 ---
@@ -209,16 +231,16 @@ curl "https://localhost:5001/api/booksapi/search?query=harry"
 #### 📊 GET /api/booksapi/stats
 Pobierz statystyki książek
 ```bash
-curl https://localhost:5001/api/booksapi/stats
+curl https://localhost:5235/api/booksapi/stats
 ```
 
 **Odpowiedź:**
 ```json
 {
-  "totalBooks": 15,
-  "totalCopies": 47,
-  "availableBooks": 12,
-  "unavailableBooks": 3
+"totalBooks": 15,
+"totalCopies": 47,
+"availableBooks": 12,
+"unavailableBooks": 3
 }
 ```
 
@@ -227,16 +249,16 @@ curl https://localhost:5001/api/booksapi/stats
 #### ➕ POST /api/booksapi
 Utwórz nową książkę
 ```bash
-curl -X POST https://localhost:5001/api/booksapi \
-  -H "Content-Type: application/json" \
-  -d '{
-    "title": "Nowa książka",
-    "isbn": "1234567890",
-    "publicationYear": 2024,
-    "availableCopies": 5,
-    "description": "Opis książki",
-    "authorIds": [1]
-  }'
+curl -X POST https://localhost:5235/api/booksapi \
+-H "Content-Type: application/json" \
+-d '{
+"title": "Nowa książka",
+"isbn": "1234567890",
+"publicationYear": 2024,
+"availableCopies": 5,
+"description": "Opis książki",
+"authorIds": [1]
+}'
 ```
 
 **Odpowiedź 201 Created** - Zwraca utworzoną książkę z ID
@@ -244,7 +266,7 @@ curl -X POST https://localhost:5001/api/booksapi \
 **Odpowiedź 409 Conflict:**
 ```json
 {
-  "message": "Książka o tym ISBN już istnieje"
+"message": "Książka o tym ISBN już istnieje"
 }
 ```
 
@@ -253,15 +275,15 @@ curl -X POST https://localhost:5001/api/booksapi \
 #### ✏️ PUT /api/booksapi/{id}
 Zaktualizuj istniejącą książkę
 ```bash
-curl -X PUT https://localhost:5001/api/booksapi/1 \
-  -H "Content-Type: application/json" \
-  -d '{
-    "title": "Zaktualizowany tytuł",
-    "isbn": "1234567890",
-    "publicationYear": 2024,
-    "availableCopies": 10,
-    "authorIds": [1, 2]
-  }'
+curl -X PUT https://localhost:5235/api/booksapi/1 \
+-H "Content-Type: application/json" \
+-d '{
+"title": "Zaktualizowany tytuł",
+"isbn": "1234567890",
+"publicationYear": 2024,
+"availableCopies": 10,
+"authorIds": [1, 2]
+}'
 ```
 
 **Odpowiedź 204 No Content** - Sukces
@@ -271,13 +293,13 @@ curl -X PUT https://localhost:5001/api/booksapi/1 \
 #### 🗑️ DELETE /api/booksapi/{id}
 Usuń książkę
 ```bash
-curl -X DELETE https://localhost:5001/api/booksapi/1
+curl -X DELETE https://localhost:5235/api/booksapi/1
 ```
 
 **Odpowiedź 400 Bad Request:**
 ```json
 {
-  "message": "Nie można usunąć książki z aktywnymi wypożyczeniami"
+"message": "Nie można usunąć książki z aktywnymi wypożyczeniami"
 }
 ```
 
@@ -288,30 +310,30 @@ curl -X DELETE https://localhost:5001/api/booksapi/1
 #### Opcja 1: Przeglądarka
 Otwórz w przeglądarce:
 ```
-https://localhost:5001/api/booksapi
-https://localhost:5001/api/booksapi/1
-https://localhost:5001/api/booksapi/stats
-https://localhost:5001/api/booksapi/search?query=harry
+https://localhost:5235/api/booksapi
+https://localhost:5235/api/booksapi/1
+https://localhost:5235/api/booksapi/stats
+https://localhost:5235/api/booksapi/search?query=harry
 ```
 
 #### Opcja 2: PowerShell
 ```powershell
 # Pobierz wszystkie książki
-Invoke-RestMethod -Uri "https://localhost:5001/api/booksapi" -Method Get
+Invoke-RestMethod -Uri "https://localhost:5235/api/booksapi" -Method Get
 
 # Pobierz statystyki
-Invoke-RestMethod -Uri "https://localhost:5001/api/booksapi/stats" -Method Get
+Invoke-RestMethod -Uri "https://localhost:5235/api/booksapi/stats" -Method Get
 
 # Utwórz książkę
 $body = @{
-    title = "Testowa książka"
-    isbn = "1234567890"
-    publicationYear = 2024
-    availableCopies = 5
-    authorIds = @(1)
+title = "Testowa książka"
+isbn = "1234567890"
+publicationYear = 2024
+availableCopies = 5
+authorIds = @(1)
 } | ConvertTo-Json
 
-Invoke-RestMethod -Uri "https://localhost:5001/api/booksapi" -Method Post -Body $body -ContentType "application/json"
+Invoke-RestMethod -Uri "https://localhost:5235/api/booksapi" -Method Post -Body $body -ContentType "application/json"
 ```
 
 #### Opcja 3: Postman
@@ -347,43 +369,43 @@ Invoke-RestMethod -Uri "https://localhost:5001/api/booksapi" -Method Post -Body 
 ```
 LibraryManagement/
 ├── Controllers/
-│   ├── AccountController.cs       # Autoryzacja (logowanie, rejestracja)
-│   ├── BooksController.cs         # Zarządzanie książkami (CRUD)
-│   ├── AuthorsController.cs       # Zarządzanie autorami (CRUD)
-│   ├── LoansController.cs         # System wypożyczeń
-│   ├── HomeController.cs          # Strona główna
-│   └── Api/
-│       └── BooksApiController.cs  # REST API dla książek
+│ ├── AccountController.cs # Autoryzacja (logowanie, rejestracja)
+│ ├── BooksController.cs # Zarządzanie książkami (CRUD)
+│ ├── AuthorsController.cs # Zarządzanie autorami (CRUD)
+│ ├── LoansController.cs # System wypożyczeń
+│ ├── HomeController.cs # Strona główna
+│ └── Api/
+│ └── BooksApiController.cs # REST API dla książek
 ├── Models/
-│   ├── Book.cs                    # Encja książki
-│   ├── Author.cs                  # Encja autora + BookAuthor
-│   ├── Loan.cs                    # Encja wypożyczenia + LoanStatus
-│   ├── ApplicationUser.cs         # Rozszerzony użytkownik (Identity)
-│   └── ErrorViewModel.cs          # Obsługa błędów
-├── ViewModels/                    # ⭐ Modele formularzy z walidacją
-│   ├── RegisterViewModel.cs       # Formularz rejestracji
-│   ├── LoginViewModel.cs          # Formularz logowania
-│   ├── BookFormViewModel.cs       # Formularz książki (dodaj/edytuj)
-│   └── CreateLoanViewModel.cs     # Formularz wypożyczenia
+│ ├── Book.cs # Encja książki
+│ ├── Author.cs # Encja autora + BookAuthor
+│ ├── Loan.cs # Encja wypożyczenia + LoanStatus
+│ ├── ApplicationUser.cs # Rozszerzony użytkownik (Identity)
+│ └── ErrorViewModel.cs # Obsługa błędów
+├── ViewModels/ # ⭐ Modele formularzy z walidacją
+│ ├── RegisterViewModel.cs # Formularz rejestracji
+│ ├── LoginViewModel.cs # Formularz logowania
+│ ├── BookFormViewModel.cs # Formularz książki (dodaj/edytuj)
+│ └── CreateLoanViewModel.cs # Formularz wypożyczenia
 ├── Data/
-│   ├── LibraryDbContext.cs        # Kontekst EF Core
-│   ├── LibraryDbContextFactory.cs # Factory dla migracji (design-time)
-│   └── SeedData.cs                # Dane początkowe
+│ ├── LibraryDbContext.cs # Kontekst EF Core
+│ ├── LibraryDbContextFactory.cs # Factory dla migracji (design-time)
+│ └── SeedData.cs # Dane początkowe
 ├── Views/
-│   ├── Books/                     # Widoki książek (Index, Details, Create, Edit, Delete)
-│   ├── Authors/                   # Widoki autorów (Index, Details, Create, Edit, Delete)
-│   ├── Loans/                     # Widoki wypożyczeń (Index, Details, Create)
-│   ├── Account/                   # Widoki autoryzacji (Login, Register)
-│   ├── Home/                      # Widoki strony głównej
-│   └── Shared/                    # Współdzielone layouty (_Layout.cshtml)
-├── wwwroot/                       # Pliki statyczne (CSS, JS, obrazy)
-│   ├── css/
-│   ├── js/
-│   └── lib/
-├── Migrations/                    # Migracje EF Core (automatyczne)
-├── appsettings.json               # Konfiguracja (connection strings)
-├── Program.cs                     # Punkt wejścia aplikacji
-└── LibraryManagement.csproj       # Plik projektu
+│ ├── Books/ # Widoki książek (Index, Details, Create, Edit, Delete)
+│ ├── Authors/ # Widoki autorów (Index, Details, Create, Edit, Delete)
+│ ├── Loans/ # Widoki wypożyczeń (Index, Details, Create)
+│ ├── Account/ # Widoki autoryzacji (Login, Register)
+│ ├── Home/ # Widoki strony głównej
+│ └── Shared/ # Współdzielone layouty (_Layout.cshtml)
+├── wwwroot/ # Pliki statyczne (CSS, JS, obrazy)
+│ ├── css/
+│ ├── js/
+│ └── lib/
+├── Migrations/ # Migracje EF Core (automatyczne)
+├── appsettings.json # Konfiguracja (connection strings)
+├── Program.cs # Punkt wejścia aplikacji
+└── LibraryManagement.csproj # Plik projektu
 ```
 
 ---
@@ -442,6 +464,9 @@ dotnet ef database update
 
 ### Problem: "Nie można się zalogować"
 **Rozwiązanie:** Upewnij się, że baza danych została zaktualizowana i dane początkowe zostały utworzone. Sprawdź błędy w konsoli.
+
+### Problem: (SQLite) 'table "AspNetRoles" already exists'
+**Rozwiązanie:** Jeśli otrzymasz ten błąd podczas `database update`, usuń plik `library.db` z głównego folderu projektu i spróbuj ponownie. Wynika to z faktu, że baza została zainicjalizowana przed wykonaniem formalnych migracji.
 
 ---
 
