@@ -30,6 +30,7 @@ namespace LibraryManagement.Controllers
             }
 
             var authors = await authorsQuery
+                .Include(a => a.BookAuthors) 
                 .OrderBy(a => a.LastName)
                 .ThenBy(a => a.FirstName)
                 .ToListAsync();
