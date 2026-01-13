@@ -453,7 +453,7 @@ Projekt akademicki - wolny do użytku w celach edukacyjnych.
 
 ## 👥 Autorzy
 
-- **Mateusz Stojek** - Główna implementacja
+- **Mateusz Stojek** - Implementacja
 
 GitHub: [https://github.com/makiesto/LibraryManagement](https://github.com/makiesto/LibraryManagement)
 

@@ -453,7 +453,7 @@ Academic project - free to use for educational purposes.
 
 ## 👥 Authors
 
-- **[Mateusz Stojek]** - Main implementation
+- **[Mateusz Stojek]** - Implementation
 
 GitHub: [https://github.com/makiesto/LibraryManagement]
 
