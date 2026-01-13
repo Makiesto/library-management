@@ -17,10 +17,12 @@ namespace LibraryManagement.ViewModels
 
         [Required]
         [Range(1000, 2100)]
+        [Display(Name = "Publication Year")]
         public int PublicationYear { get; set; }
 
         [Required]
         [Range(0, 1000)]
+        [Display(Name = "Available Copies")]
         public int AvailableCopies { get; set; }
 
         [StringLength(1000)]
