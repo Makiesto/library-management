@@ -76,6 +76,7 @@ optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=LibraryMana
 **Database Initialization and Project Migration - bash**
 ```bash
 rm -r .\Migrations
+rm library.db
 
 dotnet ef migrations add InitialCreate --context LibraryDbContext
 dotnet ef database update --context LibraryDbContext
