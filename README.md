@@ -40,7 +40,7 @@ If you are on a Mac or Linux, follow these steps to use SQLite:
 ```
 * **Program.cs**: Use the SQLite provider:
 ```csharp
-options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))
 ```
 * **LibraryDbContextFactory.cs**: Update the design-time factory:
 ```csharp
