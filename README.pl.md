@@ -41,7 +41,7 @@ Jeśli pracujesz na komputerze Mac lub z systemem Linux, wykonaj poniższe kroki
 ```
 * **Program.cs**: Zmień dostawcę na SQLite:
 ```csharp
-options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))
 ```
 * **LibraryDbContextFactory.cs**: Zaktualizuj fabrykę czasu projektowego:
 ```csharp
@@ -66,7 +66,7 @@ Jeśli pracujesz na systemie Windows i chcesz korzystać z LocalDB:
 ```
 * **Program.cs**: Zmień dostawcę na SQL Server:
 ```csharp
-options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 ```
 * **LibraryDbContextFactory.cs**: Zaktualizuj fabrykę czasu projektowego:
 ```csharp
