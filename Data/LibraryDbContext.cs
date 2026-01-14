@@ -39,7 +39,7 @@ namespace LibraryManagement.Data
                 .HasOne(l => l.Book)
                 .WithMany(b => b.Loans)
                 .HasForeignKey(l => l.BookId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Loan>()
                 .HasOne(l => l.User)
