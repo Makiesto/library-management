@@ -68,10 +68,11 @@ After configuring your preferred provider, run the following commands:
 
 ```bash
 rm -rf Migrations
+rm library.db
 
-dotnet ef migrations add InitialCreate
+dotnet ef migrations add InitialCreate --context LibraryDbContext
+dotnet ef database update --context LibraryDbContext
 
-dotnet ef database update
 ```
 
 5. **Run application**
