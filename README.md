@@ -47,6 +47,8 @@ options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")
 optionsBuilder.UseSqlite("Data Source=library.db");
 ```
 
+**Database Initialization and Project Migration** - Bash
+
 ```bash
 rm -rf Migrations
 rm library.db
@@ -71,7 +73,7 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectio
 ```csharp
 optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=LibraryManagementDB;...");
 ```
-
+**Database Initialization and Project Migration** - Bash
 ```bash
 rm -r .\Migrations
 
