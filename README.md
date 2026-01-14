@@ -47,6 +47,15 @@ options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")
 optionsBuilder.UseSqlite("Data Source=library.db");
 ```
 
+```bash
+rm -rf Migrations
+rm library.db
+
+dotnet ef migrations add InitialCreate --context LibraryDbContext
+dotnet ef database update --context LibraryDbContext
+
+```
+
 #### B. Switching to SQL Server (Windows Setup)
 If you are on Windows and prefer LocalDB:
 
@@ -63,19 +72,14 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectio
 optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=LibraryManagementDB;...");
 ```
 
-4 **Running Migrations**
-After configuring your preferred provider, run the following commands:
-
 ```bash
-rm -rf Migrations
-rm library.db
+rm -r .\Migrations
 
 dotnet ef migrations add InitialCreate --context LibraryDbContext
 dotnet ef database update --context LibraryDbContext
-
 ```
 
-5. **Run application**
+4. **Run application**
 ```bash
 dotnet run
 ```
