@@ -51,7 +51,7 @@ optionsBuilder.UseSqlite("Data Source=library.db");
 **Inicjalizacja bazy danych i migracji projektu - bash**
 ```bash
 
-rm -r .\Migrations
+rm -rf /Migrations
 rm library.db
 
 dotnet ef migrations add InitialCreate --context LibraryDbContext
@@ -76,6 +76,7 @@ optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=LibraryMana
 **Inicjalizacja bazy danych i migracji projektu - bash**
 ```bash
 rm -r .\Migrations
+rm library.db
 
 dotnet ef migrations add InitialCreate --context LibraryDbContext
 dotnet ef database update --context LibraryDbContext
