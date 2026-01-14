@@ -48,6 +48,15 @@ options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")
 optionsBuilder.UseSqlite("Data Source=library.db");
 ```
 
+**Inicjalizacja bazy danych i migracji projektu - bash**
+```bash
+
+rm -r .\Migrations
+
+dotnet ef migrations add InitialCreate --context LibraryDbContext
+dotnet ef database update --context LibraryDbContext
+```
+
 #### B. Konfiguracja pod SQL Server (Windows)
 Jeśli pracujesz na systemie Windows i chcesz korzystać z LocalDB:
 
@@ -63,19 +72,16 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectio
 ```csharp
 optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=LibraryManagementDB;...");
 ```
-
-4. **Uruchamianie Migracji**
-Po wybraniu i skonfigurowaniu dostawcy bazy danych, wykonaj następujące komendy w terminalu:
-
+**Inicjalizacja bazy danych i migracji projektu - bash**
 ```bash
 rm -rf Migrations
+rm library.db
 
-dotnet ef migrations add InitialCreate
-
-dotnet ef database update
+dotnet ef migrations add InitialCreate --context LibraryDbContext
+dotnet ef database update --context LibraryDbContext
 ```
 
-5. **Uruchom aplikację**
+4. **Uruchom aplikację**
 ```bash
 dotnet run
 ```
