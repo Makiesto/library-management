@@ -67,7 +67,7 @@ If you are on Windows and prefer LocalDB:
 ```
 * **Program.cs**: Use the SQL Server provider:
 ```csharp
-options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 ```
 * **LibraryDbContextFactory.cs**: Update the design-time factory:
 ```csharp
