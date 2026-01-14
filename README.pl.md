@@ -52,6 +52,7 @@ optionsBuilder.UseSqlite("Data Source=library.db");
 ```bash
 
 rm -r .\Migrations
+rm library.db
 
 dotnet ef migrations add InitialCreate --context LibraryDbContext
 dotnet ef database update --context LibraryDbContext
