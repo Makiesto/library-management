@@ -1,8 +1,30 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@{
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-center mt-5">
+    <h1 class="display-4">📚 Library Management</h1>
+    <p class="lead mt-3">
+        A simple library management system
+    </p>
+
+    @if (User.Identity?.IsAuthenticated ?? false)
+    {
+        <p class="mt-4">
+            Welcome <strong>@User.Identity!.Name</strong> 👋
+        </p>
+
+        <a class="btn btn-primary mt-3" asp-controller="Books" asp-action="Index">
+            Browse Books
+        </a>
+    }
+    else
+    {
+        <p class="mt-4">
+            Please log in or register to continue.
+        </p>
+
+        <a class="btn btn-outline-primary" asp-controller="Account" asp-action="Login">Login</a>
+        <a class="btn btn-outline-primary" asp-controller="Account" asp-action="Register">Register</a>
+    }
 </div>
